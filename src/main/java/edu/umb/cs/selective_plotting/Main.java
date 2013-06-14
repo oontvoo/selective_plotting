@@ -1,7 +1,11 @@
 
-package edu.umb.cs;
+package edu.umb.cs.selective_plotting;
 
+import java.io.File;
+import java.io.IOException;
 import javax.swing.JFrame;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -38,12 +42,14 @@ public class Main extends JFrame
         setContentPane(panel);
     }
 
-    public static void main (String args[])
+    public static void main (String args[]) throws IOException, BiffException
     {
         JFrame fr = new Main();
         fr.pack();
         fr.setVisible(true);
         // -------- test excel
+        
+        
         
         
         
