@@ -11,21 +11,16 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import jxl.Sheet;
-import jxl.Workbook;
 import jxl.read.biff.BiffException;
 
 /**
@@ -111,7 +106,7 @@ public class MainWindow extends JFrame
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                if (fileWrapper.object != null && !fileWrapper.loaded)
+                //if (fileWrapper.object != null && !fileWrapper.loaded)
                 {
                     try
                     {
@@ -189,6 +184,7 @@ public class MainWindow extends JFrame
                                                        yNames);
                 
                 SeriesGraph.showGraph(filter);
+                loadBtn.doClick(); // TODO: remove this (this fix the bug of  not know how to selectively remove serires from a created dataset (which has multiple serires)
             }   
         });
 
