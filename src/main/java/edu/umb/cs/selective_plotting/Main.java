@@ -1,8 +1,12 @@
 
 package edu.umb.cs.selective_plotting;
 
+import edu.umb.cs.selective_plotting.data.DataFilter;
+import edu.umb.cs.selective_plotting.data.Parser;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JFrame;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
@@ -14,12 +18,10 @@ import org.jfree.data.general.Dataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.data.general.SeriesDataset;
-import org.jfree.data.time.Month;
-import org.jfree.data.time.Second;
-import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.data.time.*;
 import org.jfree.data.xy.DefaultXYDataset;
 import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
 import org.jfree.util.Rotation;
 
 /**
@@ -28,12 +30,32 @@ import org.jfree.util.Rotation;
  */
 public class Main extends JFrame
 {
-    public Main()
+//    public static void main (String args[]) throws IOException, BiffException
+//    {
+//        JFrame fr = new Main();
+//        fr.pack();
+//        fr.setVisible(true);
+//        // -------- test excel
+//        
+//        
+//        
+//        
+//        
+//    }
+        
+    public static void showGraph(DataFilter f)
+    {
+        JFrame fr = new Main(f);
+        fr.pack();
+        fr.setVisible(true);
+    }
+
+    public Main(DataFilter f)
     {
         super("Sample chart");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         // create a chart
-        JFreeChart chart = createLineChart(createXYDs());
+        JFreeChart chart = createLineChart("", f.getXFieldName(), "", createXYDs(f));
         
         // put it into a panel
         ChartPanel panel = new ChartPanel(chart);
@@ -42,46 +64,57 @@ public class Main extends JFrame
         setContentPane(panel);
     }
 
-    public static void main (String args[]) throws IOException, BiffException
+    private static XYDataset createXYDs(DataFilter filter)
     {
-        JFrame fr = new Main();
-        fr.pack();
-        fr.setVisible(true);
-        // -------- test excel
+        int seriesCount = filter.yCount();
+        List<TimeSeries> lines = new ArrayList<>(seriesCount);
+        String yNames[] = filter.getYFieldNames();
+        for (int n = 0; n < seriesCount; ++n)
+            lines.add(new TimeSeries(yNames[n]));
         
-        
-        
-        
-        
-    }
+        while (filter.hasNext())
+        {
+            FixedMillisecond sec = new FixedMillisecond((long)filter.nextX());
+            
+            for (TimeSeries s : lines)
+                s.add(sec, filter.nextY());
+        }
 
-    private static XYDataset createXYDs()
-    {
-        TimeSeries s1 = new TimeSeries("Percentage of oil over time");
+       TimeSeriesCollection ds = new TimeSeriesCollection();
+       for (TimeSeries s : lines)
+           ds.addSeries(s);
+       
+       return ds;
         
-        s1.add(new Month(1, 2001), 98.2);
-        s1.add(new Month(2, 2001), 93.0);
-        s1.add(new Month(3, 2001), 93.0);
-        s1.add(new Month(4, 2001), 93.0);
-        s1.add(new Month(5, 2001), 90.0);
-        
-        TimeSeries s2 = new TimeSeries("Percentage petroleum over time");
-        
-        s2.add(new Month(1, 2001), 23.2);
-        s2.add(new Month(2, 2001), 15.0);
-        s2.add(new Month(3, 2001), 10.0);
-        s2.add(new Month(4, 2001), 3.0);
-        s2.add(new Month(5, 2001), 20.0);
-        
-        TimeSeriesCollection ds = new TimeSeriesCollection();
-        ds.addSeries(s1);
-        ds.addSeries(s2);
-        
-        return ds;
+//        
+//        
+//        s1.add(new Month(1, 2001), 98.2);
+//        s1.add(new Month(2, 2001), 93.0);
+//        s1.add(new Month(3, 2001), 93.0);
+//        s1.add(new Month(4, 2001), 93.0);
+//        s1.add(new Month(5, 2001), 90.0);
+//        
+//        TimeSeries s2 = new TimeSeries("Percentage petroleum over time");
+//        
+//        s2.add(new Month(1, 2001), 23.2);
+//        s2.add(new Month(2, 2001), 15.0);
+//        s2.add(new Month(3, 2001), 10.0);
+//        s2.add(new Month(4, 2001), 3.0);
+//        s2.add(new Month(5, 2001), 20.0);
+//        
+//        TimeSeriesCollection ds = new TimeSeriesCollection();
+//        ds.addSeries(s1);
+//        ds.addSeries(s2);
+//        
+//        DefaultXYDataset rs = new DefaultXYDataset();
+//        XYSeries series = new XYSeries(0, false);
+//        
+//        rs.s
+//        return rs;
     }
-    private static JFreeChart createLineChart(XYDataset ds)
+    private static JFreeChart createLineChart(String title, String xLabel, String yLabel, XYDataset ds)
     {
-        JFreeChart chart = ChartFactory.createTimeSeriesChart("Percentages", "Months", "Percentage", ds, true, true, true);
+        JFreeChart chart = ChartFactory.createTimeSeriesChart(title, xLabel, yLabel, ds, true, true, true);
         
         // todo
         
