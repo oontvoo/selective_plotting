@@ -1,7 +1,7 @@
 
-package edu.umb.cs.selective_plotting.grapher;
+package edu.umb.cs.selective_plotting.ui;
 
-import edu.umb.cs.selective_plotting.Main;
+import edu.umb.cs.selective_plotting.SeriesGraph;
 import edu.umb.cs.selective_plotting.data.DataFilter;
 import edu.umb.cs.selective_plotting.data.DataFilterImpl;
 import edu.umb.cs.selective_plotting.data.DataParserImpl;
@@ -32,7 +32,7 @@ import jxl.read.biff.BiffException;
  *
  * @author Vy Thao Nguyen
  */
-public class ExcelReader extends JFrame
+public class MainWindow extends JFrame
 {
     private static final String TITLE = "Simple Plotting Utility";
     private static final FileFilter XLS = new FileNameExtensionFilter(".tab file", "tab");
@@ -46,7 +46,7 @@ public class ExcelReader extends JFrame
     private final Wrapper<File> fileWrapper = new Wrapper<File>();
     private final Wrapper<Parser> parserWrapper = new Wrapper <Parser>();
     
-    public ExcelReader() throws IOException, BiffException
+    public MainWindow() throws IOException, BiffException
     {
         super(TITLE);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -73,7 +73,7 @@ public class ExcelReader extends JFrame
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                int retVal = fc.showOpenDialog(ExcelReader.this);
+                int retVal = fc.showOpenDialog(MainWindow.this);
                 if (retVal == JFileChooser.APPROVE_OPTION)
                 {
                     fileWrapper.object = fc.getSelectedFile();
@@ -119,8 +119,8 @@ public class ExcelReader extends JFrame
                     }
                     catch (FileNotFoundException ex)
                     {
-                        Logger.getLogger(ExcelReader.class.getName()).log(Level.SEVERE, null, ex);
-                        JOptionPane.showMessageDialog(ExcelReader.this, "Error reading data file! Please check the log", "Error!", JOptionPane.ERROR_MESSAGE);
+                        Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(MainWindow.this, "Error reading data file! Please check the log", "Error!", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
 
@@ -140,7 +140,7 @@ public class ExcelReader extends JFrame
 
                     graphBtn.setEnabled(true);
                     clearBtn.setEnabled(true);
-                    ExcelReader.this.repaint();
+                    MainWindow.this.repaint();
                 }
             }   
         });
@@ -188,7 +188,7 @@ public class ExcelReader extends JFrame
                                                        xAxisField.getSelectedItem().toString(),
                                                        yNames);
                 
-                Main.showGraph(filter);
+                SeriesGraph.showGraph(filter);
             }   
         });
 
@@ -211,10 +211,5 @@ public class ExcelReader extends JFrame
         this.pack();
         this.setResizable(false);
         this.setVisible(true);
-    }
-    
-    public static void main(String args[]) throws IOException, BiffException
-    {
-        ExcelReader excelReader = new ExcelReader();
     }
 }

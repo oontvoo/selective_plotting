@@ -2,33 +2,24 @@
 package edu.umb.cs.selective_plotting;
 
 import edu.umb.cs.selective_plotting.data.DataFilter;
-import edu.umb.cs.selective_plotting.data.Parser;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
-import jxl.Workbook;
-import jxl.read.biff.BiffException;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot3D;
-import org.jfree.data.general.Dataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
-import org.jfree.data.general.SeriesDataset;
 import org.jfree.data.time.*;
-import org.jfree.data.xy.DefaultXYDataset;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.data.xy.XYSeries;
 import org.jfree.util.Rotation;
 
 /**
  *
  * @author Vy Thao Nguyen
  */
-public class Main extends JFrame
+public class SeriesGraph extends JFrame
 {
 //    public static void main (String args[]) throws IOException, BiffException
 //    {
@@ -45,12 +36,12 @@ public class Main extends JFrame
         
     public static void showGraph(DataFilter f)
     {
-        JFrame fr = new Main(f);
+        JFrame fr = new SeriesGraph(f);
         fr.pack();
         fr.setVisible(true);
     }
 
-    public Main(DataFilter f)
+    public SeriesGraph(DataFilter f)
     {
         super("Sample chart");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
