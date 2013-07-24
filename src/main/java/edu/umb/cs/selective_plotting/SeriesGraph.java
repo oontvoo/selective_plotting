@@ -21,19 +21,6 @@ import org.jfree.util.Rotation;
  */
 public class SeriesGraph extends JFrame
 {
-//    public static void main (String args[]) throws IOException, BiffException
-//    {
-//        JFrame fr = new Main();
-//        fr.pack();
-//        fr.setVisible(true);
-//        // -------- test excel
-//        
-//        
-//        
-//        
-//        
-//    }
-        
     public static void showGraph(DataFilter f)
     {
         JFrame fr = new SeriesGraph(f);
@@ -76,39 +63,13 @@ public class SeriesGraph extends JFrame
            ds.addSeries(s);
        
        return ds;
-        
-//        
-//        
-//        s1.add(new Month(1, 2001), 98.2);
-//        s1.add(new Month(2, 2001), 93.0);
-//        s1.add(new Month(3, 2001), 93.0);
-//        s1.add(new Month(4, 2001), 93.0);
-//        s1.add(new Month(5, 2001), 90.0);
-//        
-//        TimeSeries s2 = new TimeSeries("Percentage petroleum over time");
-//        
-//        s2.add(new Month(1, 2001), 23.2);
-//        s2.add(new Month(2, 2001), 15.0);
-//        s2.add(new Month(3, 2001), 10.0);
-//        s2.add(new Month(4, 2001), 3.0);
-//        s2.add(new Month(5, 2001), 20.0);
-//        
-//        TimeSeriesCollection ds = new TimeSeriesCollection();
-//        ds.addSeries(s1);
-//        ds.addSeries(s2);
-//        
-//        DefaultXYDataset rs = new DefaultXYDataset();
-//        XYSeries series = new XYSeries(0, false);
-//        
-//        rs.s
-//        return rs;
     }
+
     private static JFreeChart createLineChart(String title, String xLabel, String yLabel, XYDataset ds)
     {
         JFreeChart chart = ChartFactory.createTimeSeriesChart(title, xLabel, yLabel, ds, true, true, true);
         
         // todo
-        
         return chart;
     }
     
