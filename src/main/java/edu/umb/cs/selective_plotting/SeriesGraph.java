@@ -3,8 +3,11 @@ package edu.umb.cs.selective_plotting;
 
 import edu.umb.cs.selective_plotting.data.DataFilter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -50,19 +53,71 @@ public class SeriesGraph extends JFrame
         for (int n = 0; n < seriesCount; ++n)
             lines.add(new TimeSeries(yNames[n]));
         
+        // TODO: this is a waste of mem!
+        // time step --> index
+        Map<Long, Integer> idx = new HashMap<>();
+        int n = 0;
         while (filter.hasNext())
         {
-            FixedMillisecond sec = new FixedMillisecond((long)filter.nextX());
-            
+            long secL = (long)filter.nextX();
+            FixedMillisecond sec = new FixedMillisecond(secL);
+            idx.put(secL, n++);
             for (TimeSeries s : lines)
+            {
                 s.add(sec, filter.nextY());
+            }
         }
-
-       TimeSeriesCollection ds = new TimeSeriesCollection();
-       for (TimeSeries s : lines)
-           ds.addSeries(s);
+        
+        long startEnd[] = getStartEnd();
+        boolean adjustRange = false;
+        int startIdx = 0;
+        int endIdx = idx.size() - 1;
+        if (startEnd != null)
+        {
+            Integer startObj = idx.get(startEnd[0]);
+            Integer endObj = idx.get(startEnd[1]);
+            
+            if (startObj != null)
+                startIdx = startObj.intValue();
+            if (endObj != null)
+                endIdx = endObj.intValue();
+           adjustRange = true;  
+            // swap start and end, if reversed
+        }
+        
+        
+        TimeSeriesCollection ds = new TimeSeriesCollection();
+        for (TimeSeries s : lines)
+        {
+            if (adjustRange)
+            {
+                if (startIdx != 0)
+                    s.delete(0, startIdx - 1);
+                if (endIdx < idx.size() - 1)
+                    s.delete(endIdx + 1, idx.size() - 1);
+            }
+            ds.addSeries(s);
+        }
        
-       return ds;
+        return ds;
+    }
+
+    private static long[] getStartEnd ()
+    {
+        // TODO: build a window with drop-down 
+        //       prediction input field
+        String str = JOptionPane.showInputDialog("Enter starting and ending point:");
+
+        try
+        {
+            String startEnd[] = str.split("\\s*,\\s*");
+            return new long[] {(long)Double.parseDouble(startEnd[0]),
+                               (long)Double.parseDouble(startEnd[1])};
+        }
+        catch(Exception e)
+        {
+            return null;
+        }
     }
 
     private static JFreeChart createLineChart(String title, String xLabel, String yLabel, XYDataset ds)

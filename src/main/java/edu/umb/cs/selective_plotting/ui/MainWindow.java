@@ -1,4 +1,3 @@
-
 package edu.umb.cs.selective_plotting.ui;
 
 import edu.umb.cs.selective_plotting.SeriesGraph;
@@ -184,7 +183,9 @@ public class MainWindow extends JFrame
                                                        yNames);
                 
                 SeriesGraph.showGraph(filter);
-                loadBtn.doClick(); // TODO: remove this (this fix the bug of  not know how to selectively remove serires from a created dataset (which has multiple serires)
+
+                // TODO: remove this (this fix the bug of  not know how to selectively remove serires from a created dataset (which has multiple serires)
+                loadBtn.doClick(); 
             }   
         });
 

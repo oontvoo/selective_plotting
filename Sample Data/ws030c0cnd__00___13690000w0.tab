@@ -1,0 +1,41 @@
+/* Header table */                                                                                                                                                                                  
+"PRODUCT_ID               ","WS030C0CND__00___13690000W0                                   "                                                                                                        
+"PRODUCT_TYPE             ","MECA_WCL_CND                                                  "                                                                                                        
+"PARENT_EDR_1             ","WS030EM9_00_0004813690000J1.DAT                               "                                                                                                        
+"PLANET_DAY_NUMBER        ","030                                                           "                                                                                                        
+"WCL_CELL_NUMBER          ","0                                                             "                                                                                                        
+"RECORD_TYPE              ","FIXED LENGTH                                                  "                                                                                                        
+"RECORD_BYTES             ","198                                                           "                                                                                                        
+"DATA_RECORDS             ","1188                                                          "                                                                                                        
+"SCLK_START_COUNT         ","898867342.000                                                 "                                                                                                        
+"SCLK_STOP_COUNT          ","898892921.000                                                 "                                                                                                        
+"LTST_START_TIME          ","10:43:33                                                      "                                                                                                        
+"LTST_STOP_TIME           ","17:38:30                                                      "                                                                                                        
+"COND_LOW_CALIBRATION_EQ  ","uS = 1E6*(2.5600E+03-Ilow_DN)/[2.6080E+03*(2.5450E+03-V_DN)]  "                                                                                                        
+"COND_HIGH_CALIBRATION_EQ ","uS = 1E6*(2.5560E+03-Ihigh_DN)/[2.6550E+03*(2.5450E+03-V_DN)] "                                                                                                        
+                                                                                                                                                                                                    
+/* Event table */                                                                                                                                                                                   
+"drawer open         ",0898868112.951,"burp                                                                                                        "                                                
+"drawer close        ",0898868292.248,"burp                                                                                                        "                                                
+"drawer open         ",0898869883.237,"burp                                                                                                        "                                                
+"drawer close        ",0898870064.237,"burp                                                                                                        "                                                
+"reagent release     ",0898870317.435,"calibrant crucible                                                                                          "                                                
+"drawer open         ",0898873507.024,"sample delivery                                                                                             "                                                
+"drawer close        ",0898873872.416,"sample delivery                                                                                             "                                                
+"drawer open         ",0898874252.138,"sample verification                                                                                         "                                                
+"drawer close        ",0898874478.013,"sample verification                                                                                         "                                                
+                                                                                                                                                                                                    
+/* Data header table */                                                                                                                                                                             
+"Time","COND_LOW","COND_HIGH" 
+                                                                                                                                                                                                    
+/* Date table */                                                                                                                                                                                    
+0898867342.000, 2.2693E+02, 3.9051E+02                                                                                                                                                              
+0898867343.000, 7.9331E+01,-8.5657E+02                                                                                                                                                              
+0898867344.000,-1.4353E+01, 5.6239E+02                                                                                                                                                              
+0898867346.000,-8.8485E+01,-2.5584E+02                                                                                                                                                              
+0898867347.000, 6.3906E+00, 3.3034E+02                                                                                                                                                              
+0898867349.000,-2.4871E+01, 1.3234E+02                                                                                                                                                              
+0898867350.000, 2.4102E+02,-1.8588E+02                                                                                                                                                              
+0898867352.000, 3.3396E+02,-1.6850E+02                                                                                                                                                              
+0898867353.000,-3.7592E+01, 1.5301E+02                                                                                                                                                              
+0898867354.000,-1.8877E+02, 1.6778E+03                                                                                                                                                              
