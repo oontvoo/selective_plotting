@@ -85,7 +85,13 @@ public class SeriesGraph extends JFrame
             // swap start and end, if reversed
         }
         
-        
+        if (startIdx > endIdx)
+        {
+            int temp = startIdx;
+            startIdx = endIdx;
+            endIdx = temp;
+        }
+
         TimeSeriesCollection ds = new TimeSeriesCollection();
         for (TimeSeries s : lines)
         {
