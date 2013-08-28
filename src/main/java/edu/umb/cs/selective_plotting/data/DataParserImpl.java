@@ -16,13 +16,14 @@ public class DataParserImpl implements Parser
     private final File file;
     private final Map<String, List<Double>> table;
     private final Scanner input;
-    
+    private final List<String> headers;
     public DataParserImpl (File f) throws FileNotFoundException
     {
         file = f;
         input = new Scanner(f);
         table = new LinkedHashMap<>();
  
+        headers = new ArrayList<String>();
         String line;
         while (input.hasNext())
         {
@@ -30,9 +31,12 @@ public class DataParserImpl implements Parser
             if (line.toLowerCase().contains(HEADER_MARKER))
             {
                 line = input.nextLine();
+                
                 for (String col : line.split(","))
                 {
-                    table.put(stripQuotes(col), null);
+                    String h = stripQuotes(col);
+                    headers.add(h);
+                    table.put(h, null);
                 }
                 break;
             }
@@ -47,9 +51,9 @@ public class DataParserImpl implements Parser
     }
 
     @Override
-    public Collection<String> getFields()
+    public List<String> getFields()
     {
-        return table.keySet();
+        return headers;
     }
  
     private static String stripQuotes(String st)

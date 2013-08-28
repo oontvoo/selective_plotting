@@ -1,3 +1,4 @@
+
 package edu.umb.cs.selective_plotting.ui;
 
 import edu.umb.cs.selective_plotting.SeriesGraph;
@@ -17,30 +18,68 @@ import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import jxl.read.biff.BiffException;
 
 /**
  *
- * @author Vy Thao Nguyen
+ * @author admin
  */
-public class MainWindow extends JFrame
+public class FromDBWindow extends JFrame
 {
+    
+    private static final String COND = "/Users/admin/repo/selective_plotting/SampleData/tab/ws030c0cnd__00___13690000w0.tab";
+    private static final String ISE = "/Users/admin/repo/selective_plotting/SampleData/tab/ws030c0ise__00___13690000w0.tab";
+    private static final String CP = "/Users/admin/repo/selective_plotting/SampleData/tab/ws030c0cp_0_00___13690000w0.tab";
+
     private static final String TITLE = "Simple Plotting Utility";
     private static final FileFilter XLS = new FileNameExtensionFilter(".tab file", "tab");
 
-    static class Wrapper<T>
+    private static class Wrapper<T>
     {
         T object;
         boolean loaded = false;
     }
     
-    private final Wrapper<File> fileWrapper = new Wrapper<File>();
-    private final Wrapper<Parser> parserWrapper = new Wrapper <Parser>();
+    private final MainWindow.Wrapper<File> fileWrapper = new MainWindow.Wrapper<File>();
+    private final MainWindow.Wrapper<Parser> parserWrapper = new MainWindow.Wrapper <Parser>();
     
-    public MainWindow() throws IOException, BiffException
+    private static class LoadFileListener implements ActionListener
+    {
+        MainWindow.Wrapper<File> fileWrapper;
+        String p;
+        JButton load;
+        public LoadFileListener(String path, MainWindow.Wrapper wrap, JButton l)
+        {
+            fileWrapper = wrap;
+            p = path;
+            load = l;
+            
+            
+        }
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            fileWrapper.object = new File(p);
+            
+            // load it
+            load.doClick();
+        }
+    }
+    public FromDBWindow() throws IOException, BiffException
     {
         super(TITLE);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -50,33 +89,50 @@ public class MainWindow extends JFrame
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         
-        // north subPanel
-        final JTextField filepath = new JTextField("");
-        filepath.setEditable(false);
-        filepath.setPreferredSize(new Dimension(180, 25));
-
-        final JFileChooser fc = new JFileChooser();
-        fc.setFileFilter(XLS);
+        // north sub panel : 3 visable buttons
+        final JButton loadBtn = new JButton("Load");
+        
+        JButton cndBtn = new JButton("Conductivities");
+        cndBtn.addActionListener(new LoadFileListener(COND, fileWrapper, loadBtn));
+        
+        JButton ise = new JButton("Concentrations");
+        ise.addActionListener(new LoadFileListener(ISE, fileWrapper, loadBtn));
+        
+        JButton cp = new JButton("CP");
+        cp.addActionListener(new LoadFileListener(CP, fileWrapper, loadBtn));
+        
+//        // north subPanel
+//        final JTextField filepath = new JTextField("");
+//        filepath.setEditable(false);
+//        filepath.setPreferredSize(new Dimension(180, 25));
+//
+//        final JFileChooser fc = new JFileChooser();
+//        fc.setFileFilter(XLS);
+        
         JPanel north = new JPanel();
         north.setBorder(BorderFactory.createEtchedBorder());
         
-        // file chooser
-        JButton openBtn = new JButton("Browse File");
-        openBtn.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                int retVal = fc.showOpenDialog(MainWindow.this);
-                if (retVal == JFileChooser.APPROVE_OPTION)
-                {
-                    fileWrapper.object = fc.getSelectedFile();
-                    filepath.setText(fileWrapper.object.getAbsolutePath());
-                    fileWrapper.loaded = false;
-                }
-            }   
-        });
-        north.add(openBtn);
+        north.add(cndBtn);
+        north.add(ise);
+        north.add(cp);
+        
+//        // file chooser
+//        JButton openBtn = new JButton("Browse File");
+//        openBtn.addActionListener(new ActionListener()
+//        {
+//            @Override
+//            public void actionPerformed(ActionEvent e)
+//            {
+//                int retVal = fc.showOpenDialog(FromDBWindow.this);
+//                if (retVal == JFileChooser.APPROVE_OPTION)
+//                {
+//                    fileWrapper.object = fc.getSelectedFile();
+//                    filepath.setText(fileWrapper.object.getAbsolutePath());
+//                    fileWrapper.loaded = false;
+//                }
+//            }   
+//        });
+//        north.add(openBtn);
         
         // load
         // TODO: add action listener to remove field selected as xAxis
@@ -98,7 +154,6 @@ public class MainWindow extends JFrame
         final JButton clearBtn = new JButton("Clear Selection");
         clearBtn.setEnabled(false);
         
-        final JButton loadBtn = new JButton("Load");
         
         loadBtn.addActionListener(new ActionListener()
         {
@@ -114,11 +169,11 @@ public class MainWindow extends JFrame
                     catch (FileNotFoundException ex)
                     {
                         Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                        JOptionPane.showMessageDialog(MainWindow.this, "Error reading data file! Please check the log", "Error!", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(FromDBWindow.this, "Error reading data file! Please check the log", "Error!", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
 
-                    filepath.setText("Analysing: " + fileWrapper.object.getName());
+                    //filepath.setText("Analysing: " + fileWrapper.object.getName());
                     fileWrapper.loaded = true;
 
                     // populate the list with fields
@@ -134,12 +189,12 @@ public class MainWindow extends JFrame
 
                     graphBtn.setEnabled(true);
                     clearBtn.setEnabled(true);
-                    MainWindow.this.repaint();
+                    FromDBWindow.this.repaint();
                 }
             }   
         });
-        north.add(filepath);
-        north.add(loadBtn);
+       // north.add(filepath);
+        //north.add(loadBtn);
 
         mainPanel.add(north, BorderLayout.NORTH);
         

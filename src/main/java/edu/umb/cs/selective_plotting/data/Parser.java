@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface Parser 
 {
-    Collection<String> getFields();
+    List<String> getFields();
     
     String[] nextLine();
     

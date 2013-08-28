@@ -1,0 +1,18 @@
+-- timesteps table
+
+CREATE TABLE timesteps (time timestamp primary key not null);
+
+-- concentrations of each ions
+
+CREATE TABLE concentrations (ion_name varchar(16) not null,
+       	     		     time timestamp not null FOREIGN KEY REFERENCES timesteps.time,
+			     percentage decimal not null);
+
+-- conductivity 
+
+CREATE TABLE conductivities (cond_hi decimal not null,
+       	     		     cond_low decimal not null,
+			     time timestamp not null FOREIGN KEY REFERENCES timestamps.time);
+
+-- We should be able to join the three using timesteps.time
+-- TODO: look at WORKBENCH
