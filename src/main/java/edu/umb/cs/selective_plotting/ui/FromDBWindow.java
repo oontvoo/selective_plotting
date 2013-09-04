@@ -22,21 +22,20 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import jxl.read.biff.BiffException;
 
 /**
- *
- * @author admin
+ * This class implements a main window, which reads data from the database,
+ * as opposed to files.
+ * 
+ * (For graphing data from files, use <code>FromFilesWindow</code>
+ * @author Vy THao Nguyen
  */
 public class FromDBWindow extends JFrame
 {
@@ -45,8 +44,7 @@ public class FromDBWindow extends JFrame
     private static final String ISE = "/Users/admin/repo/selective_plotting/SampleData/tab/ws030c0ise__00___13690000w0.tab";
     private static final String CP = "/Users/admin/repo/selective_plotting/SampleData/tab/ws030c0cp_0_00___13690000w0.tab";
 
-    private static final String TITLE = "Simple Plotting Utility";
-    private static final FileFilter XLS = new FileNameExtensionFilter(".tab file", "tab");
+    private static final String TITLE = "Simple Plotting Utility (From DB)";
 
     private static class Wrapper<T>
     {
@@ -54,15 +52,15 @@ public class FromDBWindow extends JFrame
         boolean loaded = false;
     }
     
-    private final MainWindow.Wrapper<File> fileWrapper = new MainWindow.Wrapper<File>();
-    private final MainWindow.Wrapper<Parser> parserWrapper = new MainWindow.Wrapper <Parser>();
+    private final FromFilesWindow.Wrapper<File> fileWrapper = new FromFilesWindow.Wrapper<File>();
+    private final FromFilesWindow.Wrapper<Parser> parserWrapper = new FromFilesWindow.Wrapper <Parser>();
     
     private static class LoadFileListener implements ActionListener
     {
-        MainWindow.Wrapper<File> fileWrapper;
+        FromFilesWindow.Wrapper<File> fileWrapper;
         String p;
         JButton load;
-        public LoadFileListener(String path, MainWindow.Wrapper wrap, JButton l)
+        public LoadFileListener(String path, FromFilesWindow.Wrapper wrap, JButton l)
         {
             fileWrapper = wrap;
             p = path;
@@ -101,38 +99,12 @@ public class FromDBWindow extends JFrame
         JButton cp = new JButton("CP");
         cp.addActionListener(new LoadFileListener(CP, fileWrapper, loadBtn));
         
-//        // north subPanel
-//        final JTextField filepath = new JTextField("");
-//        filepath.setEditable(false);
-//        filepath.setPreferredSize(new Dimension(180, 25));
-//
-//        final JFileChooser fc = new JFileChooser();
-//        fc.setFileFilter(XLS);
-        
         JPanel north = new JPanel();
         north.setBorder(BorderFactory.createEtchedBorder());
         
         north.add(cndBtn);
         north.add(ise);
         north.add(cp);
-        
-//        // file chooser
-//        JButton openBtn = new JButton("Browse File");
-//        openBtn.addActionListener(new ActionListener()
-//        {
-//            @Override
-//            public void actionPerformed(ActionEvent e)
-//            {
-//                int retVal = fc.showOpenDialog(FromDBWindow.this);
-//                if (retVal == JFileChooser.APPROVE_OPTION)
-//                {
-//                    fileWrapper.object = fc.getSelectedFile();
-//                    filepath.setText(fileWrapper.object.getAbsolutePath());
-//                    fileWrapper.loaded = false;
-//                }
-//            }   
-//        });
-//        north.add(openBtn);
         
         // load
         // TODO: add action listener to remove field selected as xAxis
@@ -160,41 +132,36 @@ public class FromDBWindow extends JFrame
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                //if (fileWrapper.object != null && !fileWrapper.loaded)
+                try
                 {
-                    try
-                    {
-                        parserWrapper.object = new DataParserImpl(fileWrapper.object);
-                    }
-                    catch (FileNotFoundException ex)
-                    {
-                        Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                        JOptionPane.showMessageDialog(FromDBWindow.this, "Error reading data file! Please check the log", "Error!", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-
-                    //filepath.setText("Analysing: " + fileWrapper.object.getName());
-                    fileWrapper.loaded = true;
-
-                    // populate the list with fields
-                    yAxisModel.removeAllElements();
-                    xAxisField.removeAllItems();
-                    
-                    final Collection<String> cols = parserWrapper.object.getFields(); 
-                    for (String col : cols)
-                        xAxisField.addItem(col);
-                    
-                    for (String col : cols)
-                        yAxisModel.addElement(col);
-
-                    graphBtn.setEnabled(true);
-                    clearBtn.setEnabled(true);
-                    FromDBWindow.this.repaint();
+                    parserWrapper.object = new DataParserImpl(fileWrapper.object);
                 }
+                catch (FileNotFoundException ex)
+                {
+                    Logger.getLogger(FromFilesWindow.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(FromDBWindow.this, "Error reading data file! Please check the log", "Error!", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                fileWrapper.loaded = true;
+
+                // populate the list with fields
+                yAxisModel.removeAllElements();
+                xAxisField.removeAllItems();
+
+                final Collection<String> cols = parserWrapper.object.getFields(); 
+                for (String col : cols)
+                    xAxisField.addItem(col);
+
+                for (String col : cols)
+                    yAxisModel.addElement(col);
+
+                graphBtn.setEnabled(true);
+                clearBtn.setEnabled(true);
+                FromDBWindow.this.repaint();
+
             }   
         });
-       // north.add(filepath);
-        //north.add(loadBtn);
 
         mainPanel.add(north, BorderLayout.NORTH);
         

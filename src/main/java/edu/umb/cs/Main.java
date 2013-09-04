@@ -1,7 +1,7 @@
 package edu.umb.cs;
 
 import edu.umb.cs.selective_plotting.ui.FromDBWindow;
-import edu.umb.cs.selective_plotting.ui.MainWindow;
+import edu.umb.cs.selective_plotting.ui.FromFilesWindow;
 
 /**
  *
@@ -13,8 +13,14 @@ public class Main
     {
         try
         {
-            //MainWindow excelReader = new MainWindow();
-            FromDBWindow win = new FromDBWindow();
+            if (args != null && args.length == 1 && "-db".equals(args[0]))
+            {
+                FromDBWindow win = new FromDBWindow();
+            }
+            else
+            {
+                FromFilesWindow win = new FromFilesWindow();
+            }
         }
         catch (Exception e)
         {

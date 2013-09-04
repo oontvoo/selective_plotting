@@ -26,7 +26,7 @@ import jxl.read.biff.BiffException;
  *
  * @author Vy Thao Nguyen
  */
-public class MainWindow extends JFrame
+public class FromFilesWindow extends JFrame
 {
     private static final String TITLE = "Simple Plotting Utility";
     private static final FileFilter XLS = new FileNameExtensionFilter(".tab file", "tab");
@@ -40,7 +40,7 @@ public class MainWindow extends JFrame
     private final Wrapper<File> fileWrapper = new Wrapper<File>();
     private final Wrapper<Parser> parserWrapper = new Wrapper <Parser>();
     
-    public MainWindow() throws IOException, BiffException
+    public FromFilesWindow() throws IOException, BiffException
     {
         super(TITLE);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,7 +67,7 @@ public class MainWindow extends JFrame
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                int retVal = fc.showOpenDialog(MainWindow.this);
+                int retVal = fc.showOpenDialog(FromFilesWindow.this);
                 if (retVal == JFileChooser.APPROVE_OPTION)
                 {
                     fileWrapper.object = fc.getSelectedFile();
@@ -113,8 +113,8 @@ public class MainWindow extends JFrame
                     }
                     catch (FileNotFoundException ex)
                     {
-                        Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                        JOptionPane.showMessageDialog(MainWindow.this, "Error reading data file! Please check the log", "Error!", JOptionPane.ERROR_MESSAGE);
+                        Logger.getLogger(FromFilesWindow.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(FromFilesWindow.this, "Error reading data file! Please check the log", "Error!", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
 
@@ -134,7 +134,7 @@ public class MainWindow extends JFrame
 
                     graphBtn.setEnabled(true);
                     clearBtn.setEnabled(true);
-                    MainWindow.this.repaint();
+                    FromFilesWindow.this.repaint();
                 }
             }   
         });

@@ -3,17 +3,15 @@ package edu.umb.cs.selective_plotting.data;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Collection;
+import java.sql.*;
 import java.util.List;
 
 /**
- *
- * @author admin
+ * This class is used to populate an existing wcl_data database with data from files
+ * (See the attached scripts directory for the schema)
+ * 
+ * TODO:
+ * @author Vy Thao Nguyen
  */
 public class FromDB
 {
@@ -49,7 +47,7 @@ public class FromDB
         while (p.hasNext())
         {
             String line[] = p.nextLine();
-            
+            //TODO
             //ResultSet rs = stm.execute("INSERT INTO wcl_data.concentrations(ion_name, time, percentage");
         }
     }
